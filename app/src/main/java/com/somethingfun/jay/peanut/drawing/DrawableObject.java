@@ -2,6 +2,8 @@ package com.somethingfun.jay.peanut.drawing;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.view.animation.Interpolator;
 
 import com.somethingfun.jay.peanut.PeanutView;
@@ -16,16 +18,22 @@ public abstract class DrawableObject {
 
     protected Paint paint;                  // paint for drawing
     protected Interpolator interpolator;    // interpolator
-    protected AlphaTransition alphaAnim;          // represent for alpha anim
+    protected AlphaTransition alphaAnim;    // represent for alpha anim
     protected long duration;                // duration of animation
     protected long startTime;               // animation starting time
-    protected boolean repeatAnim;
+    protected long delay;                   // delay before starting
+    protected boolean repeatAnim;           // repeat animation or not
     protected boolean onAnimating;
     protected boolean retainAfterAnimation = true;
+    protected @ColorInt int paintColor;
 
 
     public void startAnimation(long startTime) {
-        this.startTime = startTime;
+        this.startTime = startTime + delay;
+    }
+
+    public void setDelay(long delay) {
+        this.delay = delay;
     }
 
     public void setInterpolator(Interpolator interpolator) {
@@ -46,9 +54,12 @@ public abstract class DrawableObject {
         alphaAnim.to   = to;
     }
 
-    protected boolean shouldAnimate(long currentTime) {
-        long animEndTime = startTime + duration;
-        return animEndTime > currentTime;
+    public long getDuration() {
+        return duration;
+    }
+
+    public long getDelay() {
+        return delay;
     }
 
     protected boolean shouldInvalidate() {
@@ -62,33 +73,30 @@ public abstract class DrawableObject {
      * @param currentTime
      * @return Need to invalidate or not
      */
-    public boolean draw(PeanutView view, Canvas canvas, long currentTime) {
-        if (view == null || canvas == null) {
-            return false;
+    public boolean draw(@NonNull PeanutView view, @NonNull Canvas canvas, long currentTime) {
+        if (currentTime < startTime) {
+            return true;
         }
 
-        boolean shouldAnimate = shouldAnimate(currentTime);
+        boolean shouldAnimate = view.shouldAnimate(this, currentTime);
         boolean justStoppedAnimating = onAnimating && shouldAnimate == false;
         onAnimating = shouldAnimate;
         if (onAnimating) {
             long timeProceed = currentTime - startTime;
             float interpolation = getInterpolation(timeProceed / (float) duration);
             drawInAnimation(canvas, interpolation);
-            return shouldInvalidate();
         } else {
-            if (justStoppedAnimating) {
-                if (repeatAnim) {
-                    startAnimation(System.currentTimeMillis());
-                }
+            if (retainAfterAnimation) {
+                drawLastState(canvas);
             } else {
-                if (retainAfterAnimation) {
-                    drawLastState(canvas);
-                } else {
-                    drawInitialState(canvas);
-                }
+                //drawInitialState(canvas);
+                //view.removeDrawingObject(this);
+            }
+
+            if (justStoppedAnimating && repeatAnim) {
+                startAnimation(System.currentTimeMillis());
             }
         }
-
 
         return shouldInvalidate();
 
@@ -117,7 +125,7 @@ public abstract class DrawableObject {
      * Set duration of animation
      * @param duration
      */
-    public void setAnimateDuration(long duration) {
+    public void setAnimDuration(long duration) {
         this.duration = duration;
     }
 
@@ -139,6 +147,10 @@ public abstract class DrawableObject {
         }
 
         paint.setAlpha(alphaAnim.calcTransitionValue(interpolation));
+    }
+
+    public void setPaintColor(@ColorInt int color) {
+        paint.setColor(color);
     }
 
 }

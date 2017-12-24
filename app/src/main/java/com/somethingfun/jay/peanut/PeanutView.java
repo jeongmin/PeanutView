@@ -41,13 +41,13 @@ public class PeanutView extends View {
      * Add drawableObject to dra
      * @param drawableObject
      */
-    public void addShape(DrawableObject drawableObject) {
+    public void addDrawingObject(DrawableObject drawableObject) {
         if (drawableObjectList != null) {
             drawableObjectList.add(drawableObject);
         }
     }
 
-    public void removeShape(DrawableObject drawableObject) {
+    public void removeDrawingObject(DrawableObject drawableObject) {
         if (drawableObjectList != null) {
             drawableObjectList.remove(drawableObject);
         }
@@ -78,5 +78,14 @@ public class PeanutView extends View {
         if (needInvalidate) {
             invalidate();
         }
+    }
+
+    public boolean shouldAnimate(DrawableObject drawableObject, long currentTime) {
+        long animEndTime = animStartTime + drawableObject.getDuration() + drawableObject.getDelay();
+        return animStartTime <= currentTime && animEndTime > currentTime;
+    }
+
+    public long getAnimStartTime() {
+        return animStartTime;
     }
 }

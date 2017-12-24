@@ -8,7 +8,7 @@ import android.graphics.RectF;
  * Created by jay on 17. 11. 11.
  */
 
-public class Circle extends DrawableObject {
+public class CircleDrawable extends DrawableObject {
 
     private float cx;
     private float cy;
@@ -18,7 +18,7 @@ public class Circle extends DrawableObject {
     private float animCy;
     private float animRadius;
 
-    public Circle(float cx, float cy, float radius) {
+    public CircleDrawable(float cx, float cy, float radius) {
         this.cx = cx;
         this.cy = cy;
         this.radius = radius;

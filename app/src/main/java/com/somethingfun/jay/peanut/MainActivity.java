@@ -1,15 +1,18 @@
 package com.somethingfun.jay.peanut;
 
-import android.graphics.RectF;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 
-import com.somethingfun.jay.peanut.drawing.Circle;
+import com.somethingfun.jay.peanut.drawing.CircleDrawable;
 import com.somethingfun.jay.peanut.drawing.Line;
-import com.somethingfun.jay.peanut.drawing.Square;
+import com.somethingfun.jay.peanut.drawing.LineDrawable;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,51 +26,53 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.start_anim).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPeanutView.startAnimation();
+                Random rnd = new Random();
+                @ColorInt int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
 
+                int x = (int)(Math.random() * mPeanutView.getWidth());
+                int y = (int)(Math.random() * mPeanutView.getHeight());
+                int radius = (int)(Math.random() * 200);
+
+                int duration = (int)(Math.random() * 1000);
+                duration = (duration < 300) ? 300 : duration;
+                makeRain(x, y, radius, duration, color);
+                mPeanutView.startAnimation();
             }
         });
 
         mPeanutView = findViewById(R.id.peanutView);
         mPeanutView.init();
-
-        Line line = new Line(0, 0, 500, 500);
-        line.setInterpolator(new AccelerateInterpolator());
-        line.setAnimateDuration(1000);
-
-        Line line2 = new Line(500, 0, 0, 500);
-        line2.setAnimateDuration(600);
-        line2.repeatAnim(true);
-
-        Square square = new Square(
-                new RectF(500, 500, 500, 500),
-                new RectF(100, 500, 200, 1200)
-        );
-        square.setAnimateDuration(2000);
-
-        Square square2 = new Square(
-                new RectF(500, 0, 550, 50),
-                new RectF(500, 1200, 550, 1250)
-        );
-        square2.setAnimateDuration(300);
-        square2.setInterpolator(new AccelerateInterpolator());
-        square2.setAlphaAnim(0, 1);
-        square2.repeatAnim(true);
-        square2.setRetainAfterAnimation(false);
-
-
-        Circle circle1 = new Circle(500, 500, 100);
-        circle1.setAnimation(500, 500, 300);
-        circle1.setInterpolator(new OvershootInterpolator());
-        circle1.repeatAnim(true);
-        circle1.setAlphaAnim(0, 1);
-        circle1.setRetainAfterAnimation(true);
-        circle1.setAnimateDuration(3000);
-
-        mPeanutView.addShape(line);
-        mPeanutView.addShape(line2);
-        mPeanutView.addShape(square);
-        mPeanutView.addShape(square2);
-        mPeanutView.addShape(circle1);
     }
+
+    private void makeRain(float x, float y, float radius, int duration, @ColorInt int color) {
+        LineDrawable lineDrawable = new LineDrawable(new Line(x, 0, x, 0),new Line(x, 0, x, y));
+        lineDrawable.setPaintColor(color);
+        lineDrawable.setAnimDuration(duration);
+        lineDrawable.setAlphaAnim(0.5f, 1);
+        lineDrawable.setRetainAfterAnimation(false);
+        lineDrawable.setInterpolator(new AccelerateInterpolator());
+
+        LineDrawable lineDrawable2 = new LineDrawable(new Line(x, 0, x, y),new Line(x, y, x, y));
+        lineDrawable2.setPaintColor(color);
+        lineDrawable2.setAnimDuration(duration / 2);
+        lineDrawable2.setRetainAfterAnimation(false);
+        lineDrawable2.setDelay(duration);
+        lineDrawable2.setInterpolator(new AccelerateInterpolator());
+
+        CircleDrawable circleDrawable = new CircleDrawable(x, y, 0);
+        circleDrawable.setPaintColor(color);
+        circleDrawable.setAnimation(x, y, radius);
+        circleDrawable.setAlphaAnim(0.3f, 1);
+        circleDrawable.setAnimDuration(duration);
+        circleDrawable.setDelay(duration + duration / 2);
+        circleDrawable.setRetainAfterAnimation(false);
+        circleDrawable.setInterpolator(new OvershootInterpolator());
+
+
+
+        mPeanutView.addDrawingObject(lineDrawable);
+        mPeanutView.addDrawingObject(lineDrawable2);
+        mPeanutView.addDrawingObject(circleDrawable);
+    }
+
 }
