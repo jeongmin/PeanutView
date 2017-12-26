@@ -1,4 +1,4 @@
-package com.somethingfun.jay.peanut;
+package com.jeongmin.peanutview.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.somethingfun.jay.peanut.drawing.animatable.Animatable;
+import com.jeongmin.peanutview.drawing.animatable.Animatable;
 
 import java.util.ArrayList;
 
@@ -42,12 +42,6 @@ public class PeanutView extends View {
     public void addDrawingObject(Animatable animatable) {
         if (animatableList != null) {
             animatableList.add(animatable);
-        }
-    }
-
-    public void removeDrawingObject(Animatable animatable) {
-        if (animatableList != null) {
-            animatableList.remove(animatable);
         }
     }
 

@@ -1,10 +1,10 @@
-package com.somethingfun.jay.peanut.drawing;
+package com.jeongmin.peanutview.drawing;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import com.somethingfun.jay.peanut.drawing.animatable.Animatable;
+import com.jeongmin.peanutview.drawing.animatable.Animatable;
 
 /**
  * Created by jay on 17. 11. 11.

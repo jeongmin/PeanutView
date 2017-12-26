@@ -1,10 +1,10 @@
-package com.somethingfun.jay.peanut.drawing.animatable;
+package com.jeongmin.peanutview.drawing.animatable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 
-import com.somethingfun.jay.peanut.drawing.shape.Circle;
+import com.jeongmin.peanutview.drawing.shape.Circle;
 
 /**
  * Created by jay on 17. 11. 11.

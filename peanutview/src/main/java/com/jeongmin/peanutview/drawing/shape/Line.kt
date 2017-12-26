@@ -1,4 +1,4 @@
-package com.somethingfun.jay.peanut.drawing.shape
+package com.jeongmin.peanutview.drawing.shape
 
 /**
  * Created by jay on 17. 12. 24.

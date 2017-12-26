@@ -1,4 +1,4 @@
-package com.somethingfun.jay.peanut.drawing.animatable;
+package com.jeongmin.peanutview.drawing.animatable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -6,8 +6,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.view.animation.Interpolator;
 
-import com.somethingfun.jay.peanut.PeanutView;
-import com.somethingfun.jay.peanut.transition.AlphaTransition;
+import com.jeongmin.peanutview.transition.AlphaTransition;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.somethingfun.jay.peanut.transition;
+package com.jeongmin.peanutview.transition;
 
 /**
  * Created by jay on 17. 11. 14.

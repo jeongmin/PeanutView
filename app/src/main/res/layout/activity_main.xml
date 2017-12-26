@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.somethingfun.jay.peanut.MainActivity">
+    tools:context="com.somethingfun.jay.peanut.sample.MainActivity">
 
     <Button
         android:id="@+id/start_anim"
@@ -17,7 +17,7 @@
         android:text="Start Anim"
         />
 
-    <com.somethingfun.jay.peanut.PeanutView
+    <com.jeongmin.peanutview.view.PeanutView
         android:id="@+id/peanutView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

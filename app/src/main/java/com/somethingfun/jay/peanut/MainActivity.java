@@ -9,10 +9,11 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 
-import com.somethingfun.jay.peanut.drawing.shape.Circle;
-import com.somethingfun.jay.peanut.drawing.animatable.CircleAnimatable;
-import com.somethingfun.jay.peanut.drawing.shape.Line;
-import com.somethingfun.jay.peanut.drawing.animatable.LineAnimatable;
+import com.jeongmin.peanutview.drawing.animatable.CircleAnimatable;
+import com.jeongmin.peanutview.drawing.animatable.LineAnimatable;
+import com.jeongmin.peanutview.drawing.shape.Circle;
+import com.jeongmin.peanutview.drawing.shape.Line;
+import com.jeongmin.peanutview.view.PeanutView;
 
 import java.util.Random;
 
