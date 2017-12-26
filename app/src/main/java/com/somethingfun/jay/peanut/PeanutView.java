@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.somethingfun.jay.peanut.drawing.DrawableObject;
+import com.somethingfun.jay.peanut.drawing.animatable.Animatable;
 
 import java.util.ArrayList;
 
@@ -17,9 +17,7 @@ import java.util.ArrayList;
 public class PeanutView extends View {
 
 
-    private ArrayList<DrawableObject> drawableObjectList;
-    private long animStartTime;
-
+    private ArrayList<Animatable> animatableList;
 
     public PeanutView(Context context) {
         super(context);
@@ -34,58 +32,56 @@ public class PeanutView extends View {
     }
 
     public void init() {
-        drawableObjectList = new ArrayList<>();
+        animatableList = new ArrayList<>();
     }
 
     /**
-     * Add drawableObject to dra
-     * @param drawableObject
+     * Add animatable to dra
+     * @param animatable
      */
-    public void addDrawingObject(DrawableObject drawableObject) {
-        if (drawableObjectList != null) {
-            drawableObjectList.add(drawableObject);
+    public void addDrawingObject(Animatable animatable) {
+        if (animatableList != null) {
+            animatableList.add(animatable);
         }
     }
 
-    public void removeDrawingObject(DrawableObject drawableObject) {
-        if (drawableObjectList != null) {
-            drawableObjectList.remove(drawableObject);
+    public void removeDrawingObject(Animatable animatable) {
+        if (animatableList != null) {
+            animatableList.remove(animatable);
         }
     }
 
     public void startAnimation() {
-        animStartTime = System.currentTimeMillis();
-        for (DrawableObject drawableObject : drawableObjectList) {
-            drawableObject.startAnimation(animStartTime);
+        long animStartTime = System.currentTimeMillis();
+        for (Animatable animatable : animatableList) {
+            animatable.startAnimation(animStartTime);
         }
         invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (canvas == null || drawableObjectList == null) {
+        if (canvas == null || animatableList == null) {
             return;
         }
 
+        ArrayList<Animatable> toRemove = new ArrayList<>();
         boolean needInvalidate = false;
         long currentTime = System.currentTimeMillis();
-        for (DrawableObject drawableObject : drawableObjectList) {
-            if (drawableObject.draw(this, canvas, currentTime)) {
+        for (Animatable animatable : animatableList) {
+            if (animatable.draw(canvas, currentTime)) {
                 needInvalidate = true;
             }
+
+            if (animatable.toBeRemoved(currentTime)) {
+                toRemove.add(animatable);
+            }
         }
+
+        animatableList.removeAll(toRemove);
 
         if (needInvalidate) {
             invalidate();
         }
-    }
-
-    public boolean shouldAnimate(DrawableObject drawableObject, long currentTime) {
-        long animEndTime = animStartTime + drawableObject.getDuration() + drawableObject.getDelay();
-        return animStartTime <= currentTime && animEndTime > currentTime;
-    }
-
-    public long getAnimStartTime() {
-        return animStartTime;
     }
 }

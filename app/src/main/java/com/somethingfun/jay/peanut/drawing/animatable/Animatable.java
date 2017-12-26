@@ -1,4 +1,4 @@
-package com.somethingfun.jay.peanut.drawing;
+package com.somethingfun.jay.peanut.drawing.animatable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -14,7 +14,7 @@ import com.somethingfun.jay.peanut.transition.AlphaTransition;
  * Created by jay on 17. 11. 10.
  */
 
-public abstract class DrawableObject {
+public abstract class Animatable {
 
     protected Paint paint;                  // paint for drawing
     protected Interpolator interpolator;    // interpolator
@@ -24,7 +24,7 @@ public abstract class DrawableObject {
     protected long delay;                   // delay before starting
     protected boolean repeatAnim;           // repeat animation or not
     protected boolean onAnimating;
-    protected boolean retainAfterAnimation = true;
+    protected boolean retainAfterAnimation;
     protected @ColorInt int paintColor;
 
 
@@ -68,17 +68,16 @@ public abstract class DrawableObject {
 
     /**
      *
-     * @param view
      * @param canvas
      * @param currentTime
      * @return Need to invalidate or not
      */
-    public boolean draw(@NonNull PeanutView view, @NonNull Canvas canvas, long currentTime) {
+    public boolean draw(@NonNull Canvas canvas, long currentTime) {
         if (currentTime < startTime) {
             return true;
         }
 
-        boolean shouldAnimate = view.shouldAnimate(this, currentTime);
+        boolean shouldAnimate = shouldAnimate(currentTime);
         boolean justStoppedAnimating = onAnimating && shouldAnimate == false;
         onAnimating = shouldAnimate;
         if (onAnimating) {
@@ -88,9 +87,6 @@ public abstract class DrawableObject {
         } else {
             if (retainAfterAnimation) {
                 drawLastState(canvas);
-            } else {
-                //drawInitialState(canvas);
-                //view.removeDrawingObject(this);
             }
 
             if (justStoppedAnimating && repeatAnim) {
@@ -99,7 +95,6 @@ public abstract class DrawableObject {
         }
 
         return shouldInvalidate();
-
     }
 
     /**
@@ -153,4 +148,12 @@ public abstract class DrawableObject {
         paint.setColor(color);
     }
 
+    public boolean toBeRemoved(long currentTime) {
+        return currentTime >= (startTime + duration) && onAnimating == false && retainAfterAnimation == false;
+    }
+
+    private boolean shouldAnimate(long currentTime) {
+        long animEndTime = startTime + duration;
+        return startTime <= currentTime && animEndTime > currentTime;
+    }
 }

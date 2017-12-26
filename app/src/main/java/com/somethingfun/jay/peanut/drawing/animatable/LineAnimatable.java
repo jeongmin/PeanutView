@@ -1,20 +1,22 @@
-package com.somethingfun.jay.peanut.drawing;
+package com.somethingfun.jay.peanut.drawing.animatable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
+import com.somethingfun.jay.peanut.drawing.shape.Line;
+
 /**
  * Created by jay on 17. 11. 10.
  */
 
-public class LineDrawable extends DrawableObject {
+public class LineAnimatable extends Animatable {
 
     private Line line1;
     private Line line2;
 
 
-    public LineDrawable(Line line1, Line line2) {
+    public LineAnimatable(Line line1, Line line2) {
         this.line1 = line1;
         this.line2 = line2;
 
