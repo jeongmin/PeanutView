@@ -1,5 +1,6 @@
 package com.somethingfun.jay.peanut;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -9,13 +10,15 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 
-import com.jeongmin.peanutview.drawing.animatable.CircleAnimatable;
-import com.jeongmin.peanutview.drawing.animatable.LineAnimatable;
+import com.jeongmin.peanutview.drawing.animatable.SelfDrawable;
+import com.jeongmin.peanutview.drawing.animatable.CircleDrawable;
+import com.jeongmin.peanutview.drawing.animatable.LineDrawable;
 import com.jeongmin.peanutview.drawing.shape.Circle;
 import com.jeongmin.peanutview.drawing.shape.Line;
 import com.jeongmin.peanutview.view.PeanutView;
 
 import java.util.Random;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,25 +32,20 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.start_anim).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Random rnd = new Random();
-                @ColorInt int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-
-                int x = (int)(Math.random() * mPeanutView.getWidth());
-                int y = (int)(Math.random() * mPeanutView.getHeight());
-                int radius = (int)(Math.random() * 200);
-
-                int duration = (int)(Math.random() * 2000);
-                duration = (duration < 300) ? 300 : duration;
-
-                int startDelay = (int)(Math.random() * 1000);
-                makeRain(startDelay, x, y, radius, duration, color);
                 mPeanutView.startAnimation();
             }
         });
 
-        mPeanutView = findViewById(R.id.peanutView);
-        mPeanutView.init();
+        findViewById(R.id.start_geo_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, GeoActivity.class));
+            }
+        });
 
+
+
+        mPeanutView = findViewById(R.id.peanutView);
         mPeanutView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -60,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
                         int duration = (int)(Math.random() * 1000);
                         duration = (duration < 300) ? 300 : duration;
-                        makeRain(0, event.getX(), event.getY(), radius, duration, getRandomColor());
+                        //ArrayList<SelfDrawable> rain = makeRain(0, event.getX(), event.getY(), radius, duration, getRandomColor());
+                        ArrayList<SelfDrawable> rain = makeFireFlower(0, event.getX(), event.getY(), radius*3, duration, getRandomColor());
+                        mPeanutView.addToStartLine(rain);
                         return true;
                     default:
                         return false;
@@ -69,41 +69,139 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void makeRain(int startDelay, float x, float y, float radius, int duration, @ColorInt int color) {
-        LineAnimatable lineAnimatable = new LineAnimatable(new Line(x, 0, x, 0),new Line(x, 0, x, y));
-        lineAnimatable.setPaintColor(color);
-        lineAnimatable.setAnimDuration(duration);
-        lineAnimatable.setAlphaAnim(0.5f, 1);
-        lineAnimatable.setDelay(startDelay);
-        lineAnimatable.setInterpolator(new AccelerateInterpolator());
+    private ArrayList<SelfDrawable> makeRain(int startDelay, float x, float y, float radius, int duration, @ColorInt int color) {
+        LineDrawable lineDrawable = new LineDrawable(new Line(x, 0, x, 0),new Line(x, 0, x, y));
+        lineDrawable.setPaintColor(color);
+        lineDrawable.setAnimDuration(duration);
+        lineDrawable.setAlphaAnim(0.5f, 1);
+        lineDrawable.setDelay(startDelay);
+        lineDrawable.setInterpolator(new AccelerateInterpolator());
 
-        LineAnimatable lineAnimatable2 = new LineAnimatable(new Line(x, 0, x, y),new Line(x, y, x, y));
-        lineAnimatable2.setPaintColor(color);
-        lineAnimatable2.setAnimDuration(duration / 2);
-        lineAnimatable2.setDelay(duration + startDelay);
-        lineAnimatable2.setInterpolator(new AccelerateInterpolator());
+        LineDrawable lineDrawable2 = new LineDrawable(new Line(x, 0, x, y),new Line(x, y, x, y));
+        lineDrawable2.setPaintColor(color);
+        lineDrawable2.setAnimDuration(duration / 2);
+        lineDrawable2.setDelay(duration + startDelay);
+        lineDrawable2.setInterpolator(new AccelerateInterpolator());
 
-        CircleAnimatable circleAnimatable = new CircleAnimatable(new Circle(x, y, 0), new Circle(x, y, radius));
-        circleAnimatable.setPaintColor(color);
-        circleAnimatable.setAlphaAnim(0.3f, 1);
-        circleAnimatable.setAnimDuration(duration);
-        circleAnimatable.setDelay(duration + duration / 2 + startDelay);
-        circleAnimatable.setInterpolator(new OvershootInterpolator());
+        CircleDrawable circleDrawable = new CircleDrawable(new Circle(x, y, 0), new Circle(x, y, radius));
+        circleDrawable.setPaintColor(color);
+        circleDrawable.setAlphaAnim(0.3f, 1);
+        circleDrawable.setAnimDuration(duration);
+        circleDrawable.setDelay(duration + duration / 2 + startDelay);
+        circleDrawable.setInterpolator(new OvershootInterpolator());
 
-        mPeanutView.addDrawingObject(lineAnimatable);
-        mPeanutView.addDrawingObject(lineAnimatable2);
-        mPeanutView.addDrawingObject(circleAnimatable);
-
-        long start = System.currentTimeMillis();
-        lineAnimatable.startAnimation(start);
-        lineAnimatable2.startAnimation(start);
-        circleAnimatable.startAnimation(start);
-        mPeanutView.invalidate();
+        ArrayList<SelfDrawable> rain = new ArrayList<>();
+        rain.add(lineDrawable);
+        rain.add(lineDrawable2);
+        rain.add(circleDrawable);
+        return rain;
     }
+
+    private ArrayList<SelfDrawable> makeFireFlower(int startDelay, float x, float y, float radius, int duration, @ColorInt int color) {
+        long animTime;
+        LineDrawable lineDrawable = new LineDrawable(new Line(x, 0, x, 0),new Line(x, 0, x, y));
+        lineDrawable.setPaintColor(color);
+        lineDrawable.setAnimDuration(duration);
+        lineDrawable.setAlphaAnim(0.5f, 1);
+        lineDrawable.setDelay(startDelay);
+        lineDrawable.setInterpolator(new AccelerateInterpolator());
+
+        LineDrawable lineDrawable2 = new LineDrawable(new Line(x, 0, x, y),new Line(x, y, x, y));
+        lineDrawable2.setPaintColor(color);
+        lineDrawable2.setAnimDuration(duration / 2);
+        lineDrawable2.setDelay(duration + startDelay);
+        lineDrawable2.setInterpolator(new AccelerateInterpolator());
+        animTime = lineDrawable2.getDelay() + lineDrawable2.getDuration();
+
+        int halfLen = (int)(radius / 2);
+        LineDrawable line1 = new LineDrawable(new Line(x, y, x, y),new Line(x - halfLen, y, x + halfLen, y));
+        line1.setPaintColor(getRandomColor());
+        line1.setAnimDuration(duration);
+        line1.setDelay(animTime);
+        line1.setInterpolator(new AccelerateInterpolator());
+
+        LineDrawable line2 = new LineDrawable(new Line(x, y, x, y),new Line(x, y - halfLen, x, y + halfLen));
+        line2.setPaintColor(getRandomColor());
+        line2.setAnimDuration(duration);
+        line2.setDelay(animTime);
+        line2.setInterpolator(new AccelerateInterpolator());
+
+        float leftX = x - halfLen;
+        float leftY = getY(1, x, y, leftX);
+        float rightX = x + halfLen;
+        float rightY = getY(1, x, y, rightX);
+        LineDrawable line3 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
+        line3.setPaintColor(getRandomColor());
+        line3.setAnimDuration(duration);
+        line3.setDelay(animTime);
+        line3.setInterpolator(new AccelerateInterpolator());
+
+
+        leftY = getY(-1, x, y, leftX);
+        rightY = getY(-1, x, y, rightX);
+        LineDrawable line4 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
+        line4.setPaintColor(getRandomColor());
+        line4.setAnimDuration(duration);
+        line4.setDelay(animTime);
+        line4.setInterpolator(new AccelerateInterpolator());
+
+        leftY = getY(0.5f, x, y, leftX);
+        rightY = getY(0.5f, x, y, rightX);
+        LineDrawable line5 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
+        line5.setPaintColor(getRandomColor());
+        line5.setAnimDuration(duration);
+        line5.setDelay(animTime);
+        line5.setInterpolator(new AccelerateInterpolator());
+
+        leftY = getY(-0.5f, x, y, leftX);
+        rightY = getY(-0.5f, x, y, rightX);
+        LineDrawable line6 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
+        line6.setPaintColor(getRandomColor());
+        line6.setAnimDuration(duration);
+        line6.setDelay(animTime);
+        line6.setInterpolator(new AccelerateInterpolator());
+
+        leftY = getY(2f, x, y, leftX);
+        rightY = getY(2f, x, y, rightX);
+        LineDrawable line7 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
+        line7.setPaintColor(getRandomColor());
+        line7.setAnimDuration(duration);
+        line7.setDelay(animTime);
+        line7.setInterpolator(new AccelerateInterpolator());
+
+        leftY = getY(-2f, x, y, leftX);
+        rightY = getY(-2f, x, y, rightX);
+        LineDrawable line8 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
+        line8.setPaintColor(getRandomColor());
+        line8.setAnimDuration(duration);
+        line8.setDelay(animTime);
+        line8.setInterpolator(new AccelerateInterpolator());
+
+
+        ArrayList<SelfDrawable> rain = new ArrayList<>();
+        rain.add(lineDrawable);
+        rain.add(lineDrawable2);
+        rain.add(line1);
+        rain.add(line2);
+        rain.add(line3);
+        rain.add(line4);
+
+//        rain.add(line5);
+//        rain.add(line6);
+//        rain.add(line7);
+//        rain.add(line8);
+
+        return rain;
+    }
+
 
     private @ColorInt int getRandomColor() {
         Random rnd = new Random();
         return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+    }
+
+    private float getY(float a, float x1, float y1, float x2) {
+        return ((x2 - x1) * a) + y1;
     }
 
 }
