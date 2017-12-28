@@ -13,7 +13,7 @@ import com.jeongmin.peanutview.transition.AlphaTransition;
  * Created by jay on 17. 11. 10.
  */
 
-public abstract class Animatable {
+public abstract class SelfDrawable {
 
     protected Paint paint;                  // paint for drawing
     protected Interpolator interpolator;    // interpolator

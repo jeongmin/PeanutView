@@ -5,14 +5,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 
-import com.jeongmin.peanutview.drawing.animatable.Animatable;
+import com.jeongmin.peanutview.drawing.animatable.SelfDrawable;
 
 
 /**
  * Created by jay on 17. 11. 10.
  */
 
-public class JPath extends Animatable {
+public class JPath extends SelfDrawable {
 
     private Path  path;
     private PointF points[];

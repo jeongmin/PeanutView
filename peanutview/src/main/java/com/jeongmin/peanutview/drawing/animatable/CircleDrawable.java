@@ -10,12 +10,12 @@ import com.jeongmin.peanutview.drawing.shape.Circle;
  * Created by jay on 17. 11. 11.
  */
 
-public class CircleAnimatable extends Animatable {
+public class CircleDrawable extends SelfDrawable {
 
     private Circle circleStart;
     private Circle circleEnd;
 
-    public CircleAnimatable(@NonNull Circle circleStart, @NonNull Circle circleEnd) {
+    public CircleDrawable(@NonNull Circle circleStart, @NonNull Circle circleEnd) {
         this.circleStart = circleStart;
         this.circleEnd = circleEnd;
 

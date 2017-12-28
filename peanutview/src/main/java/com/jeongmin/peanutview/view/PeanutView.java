@@ -6,9 +6,10 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.jeongmin.peanutview.drawing.animatable.Animatable;
+import com.jeongmin.peanutview.drawing.animatable.SelfDrawable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jay on 17. 11. 10.
@@ -17,65 +18,84 @@ import java.util.ArrayList;
 public class PeanutView extends View {
 
 
-    private ArrayList<Animatable> animatableList;
+    private ArrayList<SelfDrawable> selfDrawableList;
 
     public PeanutView(Context context) {
         super(context);
+        init();
     }
 
     public PeanutView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public PeanutView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
-    public void init() {
-        animatableList = new ArrayList<>();
+    private void init() {
+        selfDrawableList = new ArrayList<>();
     }
 
     /**
-     * Add animatable to dra
-     * @param animatable
+     * Add selfDrawable to dra
+     * @param selfDrawable
      */
-    public void addDrawingObject(Animatable animatable) {
-        if (animatableList != null) {
-            animatableList.add(animatable);
+    public void addAnimatable(SelfDrawable selfDrawable) {
+        if (selfDrawableList != null) {
+            selfDrawableList.add(selfDrawable);
         }
     }
 
     public void startAnimation() {
         long animStartTime = System.currentTimeMillis();
-        for (Animatable animatable : animatableList) {
-            animatable.startAnimation(animStartTime);
+        for (SelfDrawable selfDrawable : selfDrawableList) {
+            selfDrawable.startAnimation(animStartTime);
         }
         invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (canvas == null || animatableList == null) {
+        if (canvas == null || selfDrawableList == null) {
             return;
         }
 
-        ArrayList<Animatable> toRemove = new ArrayList<>();
+        ArrayList<SelfDrawable> toRemove = new ArrayList<>();
         boolean needInvalidate = false;
         long currentTime = System.currentTimeMillis();
-        for (Animatable animatable : animatableList) {
-            if (animatable.draw(canvas, currentTime)) {
+        for (SelfDrawable selfDrawable : selfDrawableList) {
+            if (selfDrawable.draw(canvas, currentTime)) {
                 needInvalidate = true;
             }
 
-            if (animatable.toBeRemoved(currentTime)) {
-                toRemove.add(animatable);
+            if (selfDrawable.toBeRemoved(currentTime)) {
+                toRemove.add(selfDrawable);
             }
         }
 
-        animatableList.removeAll(toRemove);
+        selfDrawableList.removeAll(toRemove);
 
         if (needInvalidate) {
             invalidate();
         }
+    }
+
+    public void addToStartLine(List<SelfDrawable> selfDrawableList) {
+        long currentTime = System.currentTimeMillis();
+        for (SelfDrawable selfDrawable : selfDrawableList) {
+            selfDrawable.startAnimation(currentTime);
+            addAnimatable(selfDrawable);
+        }
+        invalidate();
+    }
+
+    public void addToStartLine(SelfDrawable selfDrawable) {
+        long currentTime = System.currentTimeMillis();
+        selfDrawable.startAnimation(currentTime);
+        addAnimatable(selfDrawable);
+        invalidate();
     }
 }

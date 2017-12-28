@@ -11,13 +11,13 @@ import com.jeongmin.peanutview.drawing.shape.Line;
  * Created by jay on 17. 11. 10.
  */
 
-public class LineAnimatable extends Animatable {
+public class LineDrawable extends SelfDrawable {
 
     private Line line1;
     private Line line2;
 
 
-    public LineAnimatable(Line line1, Line line2) {
+    public LineDrawable(Line line1, Line line2) {
         this.line1 = line1;
         this.line2 = line2;
 
