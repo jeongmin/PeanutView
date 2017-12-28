@@ -8,7 +8,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import com.jeongmin.peanutview.drawing.drawable.CircleDrawable;
 import com.jeongmin.peanutview.drawing.drawable.LineDrawable;
+import com.jeongmin.peanutview.drawing.shape.Circle;
 import com.jeongmin.peanutview.drawing.shape.Line;
 import com.jeongmin.peanutview.util.MathUtilKt;
 import com.jeongmin.peanutview.view.PeanutView;
@@ -39,6 +41,7 @@ public class GeoActivity extends AppCompatActivity {
                             point1 = null;
                             point2 = null;
                         }
+                        drawCircle(event.getX(), event.getY());
                         break;
                 }
 
@@ -55,5 +58,11 @@ public class GeoActivity extends AppCompatActivity {
         mPeanutView.addAnimatable(lineDrawable);
         mPeanutView.addToStartLine(lineDrawable);
         Log.d("jm.lee", "haha : " + MathUtilKt.getLinearEquation(point1, point2));
+    }
+
+    private void drawCircle(float x, float y) {
+        CircleDrawable circle = new CircleDrawable(new Circle(x, y, 15));
+        circle.setRetainAfterAnimation(true);
+        mPeanutView.addToStartLine(circle);
     }
 }

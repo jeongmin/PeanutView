@@ -88,6 +88,7 @@ public abstract class SelfDrawable {
                 drawLastState(canvas);
             }
 
+            // repeat
             if (justStoppedAnimating && repeatAnim) {
                 startAnimation(System.currentTimeMillis());
             }

@@ -17,7 +17,6 @@ import java.util.List;
 
 public class PeanutView extends View {
 
-
     private ArrayList<SelfDrawable> selfDrawableList;
 
     public PeanutView(Context context) {

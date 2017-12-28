@@ -25,6 +25,14 @@ public class CircleDrawable extends SelfDrawable {
         paint.setStrokeWidth(10);
     }
 
+    public CircleDrawable(@NonNull Circle circleStart) {
+        this.circleStart = circleStart;
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(0xff101010);
+        paint.setStrokeWidth(10);
+    }
+
     @Override
     protected void drawInitialState(Canvas canvas) {
         canvas.drawCircle(circleStart.getCx(), circleStart.getCy(), circleStart.getRadius(), paint);
@@ -32,11 +40,21 @@ public class CircleDrawable extends SelfDrawable {
 
     @Override
     protected void drawLastState(Canvas canvas) {
+        if (circleEnd == null) {
+            drawInitialState(canvas);
+            return;
+        }
+
         canvas.drawCircle(circleEnd.getCx(), circleEnd.getCy(), circleEnd.getRadius(), paint);
     }
 
     @Override
     protected void drawInAnimation(Canvas canvas, float interpolation) {
+        if (circleEnd == null) {
+            drawInitialState(canvas);
+            return;
+        }
+
         float deltaCx     = circleEnd.getCx() - circleStart.getCx();
         float deltaCy     = circleEnd.getCy() - circleStart.getCy();
         float deltaRadius = circleEnd.getRadius() - circleStart.getRadius();

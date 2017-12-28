@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
                         int duration = (int)(Math.random() * 1000);
                         duration = (duration < 300) ? 300 : duration;
-                        //ArrayList<SelfDrawable> rain = makeRain(0, event.getX(), event.getY(), radius, duration, getRandomColor());
-                        ArrayList<SelfDrawable> rain = makeFireFlower(0, event.getX(), event.getY(), radius*3, duration, getRandomColor());
+                        ArrayList<SelfDrawable> rain = makeRain(0, event.getX(), event.getY(), radius, duration, getRandomColor());
+                        //ArrayList<SelfDrawable> rain = makeFireFlower(0, event.getX(), event.getY(), radius*3, duration, getRandomColor());
                         mPeanutView.addToStartLine(rain);
                         return true;
                     default:
