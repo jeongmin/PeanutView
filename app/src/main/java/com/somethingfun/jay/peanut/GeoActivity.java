@@ -1,6 +1,5 @@
 package com.somethingfun.jay.peanut;
 
-import android.annotation.SuppressLint;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
-import com.jeongmin.peanutview.drawing.animatable.LineDrawable;
+import com.jeongmin.peanutview.drawing.drawable.LineDrawable;
 import com.jeongmin.peanutview.drawing.shape.Line;
 import com.jeongmin.peanutview.util.MathUtilKt;
 import com.jeongmin.peanutview.view.PeanutView;

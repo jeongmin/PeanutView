@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 
-import com.jeongmin.peanutview.drawing.animatable.SelfDrawable;
+import com.jeongmin.peanutview.drawing.drawable.SelfDrawable;
 
 
 /**

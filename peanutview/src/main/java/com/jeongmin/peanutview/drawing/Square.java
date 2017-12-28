@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import com.jeongmin.peanutview.drawing.animatable.SelfDrawable;
+import com.jeongmin.peanutview.drawing.drawable.SelfDrawable;
 
 /**
  * Created by jay on 17. 11. 11.

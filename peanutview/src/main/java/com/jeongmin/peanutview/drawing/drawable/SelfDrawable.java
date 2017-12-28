@@ -1,4 +1,4 @@
-package com.jeongmin.peanutview.drawing.animatable;
+package com.jeongmin.peanutview.drawing.drawable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.jeongmin.peanutview.drawing.animatable.SelfDrawable;
+import com.jeongmin.peanutview.drawing.drawable.SelfDrawable;
 
 import java.util.ArrayList;
 import java.util.List;

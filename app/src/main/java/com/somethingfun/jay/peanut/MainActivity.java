@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 
-import com.jeongmin.peanutview.drawing.animatable.SelfDrawable;
-import com.jeongmin.peanutview.drawing.animatable.CircleDrawable;
-import com.jeongmin.peanutview.drawing.animatable.LineDrawable;
+import com.jeongmin.peanutview.drawing.drawable.SelfDrawable;
+import com.jeongmin.peanutview.drawing.drawable.CircleDrawable;
+import com.jeongmin.peanutview.drawing.drawable.LineDrawable;
 import com.jeongmin.peanutview.drawing.shape.Circle;
 import com.jeongmin.peanutview.drawing.shape.Line;
 import com.jeongmin.peanutview.view.PeanutView;
