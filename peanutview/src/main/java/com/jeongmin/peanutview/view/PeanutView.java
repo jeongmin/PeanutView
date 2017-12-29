@@ -97,4 +97,9 @@ public class PeanutView extends View {
         addAnimatable(selfDrawable);
         invalidate();
     }
+
+    public void clear() {
+        selfDrawableList.clear();
+        invalidate();
+    }
 }

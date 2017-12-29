@@ -1,15 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.somethingfun.jay.peanut.GeoActivity">
+
+        <RadioGroup
+            android:id="@+id/radiogroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            >
+                <RadioButton
+                    android:id="@+id/radio_rain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rain"
+                    android:paddingRight="10dp"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radio_fire"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fire"
+                    android:paddingRight="10dp"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radio_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Line"
+                    android:checked="true"
+                    android:paddingRight="10dp"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radio_circle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Circle"
+                    android:paddingRight="10dp"
+                    />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clear"
+                    />
+        </RadioGroup>
+
+
         <com.jeongmin.peanutview.view.PeanutView
             android:id="@+id/peanutView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#8cf"
             android:layout_below="@id/start_anim"
-        />
-</FrameLayout>
+            />
+</LinearLayout>

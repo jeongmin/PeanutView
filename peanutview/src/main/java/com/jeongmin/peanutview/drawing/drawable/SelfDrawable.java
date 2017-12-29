@@ -26,7 +26,6 @@ public abstract class SelfDrawable {
     protected boolean retainAfterAnimation;
     protected @ColorInt int paintColor;
 
-
     public void startAnimation(long startTime) {
         this.startTime = startTime + delay;
     }
