@@ -5,7 +5,6 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -18,7 +17,6 @@ import com.jeongmin.peanutview.drawing.drawable.LineDrawable;
 import com.jeongmin.peanutview.drawing.drawable.SelfDrawable;
 import com.jeongmin.peanutview.drawing.shape.Circle;
 import com.jeongmin.peanutview.drawing.shape.Line;
-import com.jeongmin.peanutview.util.MathUtilKt;
 import com.jeongmin.peanutview.view.PeanutView;
 
 import java.util.ArrayList;
@@ -30,12 +28,19 @@ public class GeoActivity extends AppCompatActivity {
     private PointF point1;
     private PointF point2;
 
-    private int checkedId;
+    private int checkedId = R.id.radio_rain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_geo);
+
+        findViewById(R.id.clear).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clear();
+            }
+        });
 
         ((RadioGroup)findViewById(R.id.radiogroup)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

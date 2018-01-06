@@ -21,6 +21,7 @@
                     android:layout_height="wrap_content"
                     android:text="Rain"
                     android:paddingRight="10dp"
+                    android:checked="true"
                     />
 
                 <RadioButton
@@ -36,7 +37,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Line"
-                    android:checked="true"
                     android:paddingRight="10dp"
                     />
 
@@ -48,6 +48,7 @@
                     android:paddingRight="10dp"
                     />
                 <Button
+                    android:id="@+id/clear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Clear"
