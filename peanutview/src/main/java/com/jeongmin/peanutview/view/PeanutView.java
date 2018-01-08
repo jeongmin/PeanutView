@@ -82,7 +82,11 @@ public class PeanutView extends View {
         }
     }
 
-    public void addToStartLine(List<SelfDrawable> selfDrawableList) {
+    /**
+     * Add selfDrawables and start them immediately.
+     * @param selfDrawableList
+     */
+    public void startImmediate(List<SelfDrawable> selfDrawableList) {
         long currentTime = System.currentTimeMillis();
         for (SelfDrawable selfDrawable : selfDrawableList) {
             selfDrawable.startAnimation(currentTime);
@@ -91,7 +95,11 @@ public class PeanutView extends View {
         invalidate();
     }
 
-    public void addToStartLine(SelfDrawable selfDrawable) {
+    /**
+     * Add selfDrawable and start it immediately.
+     * @param selfDrawable
+     */
+    public void startImmediate(SelfDrawable selfDrawable) {
         long currentTime = System.currentTimeMillis();
         selfDrawable.startAnimation(currentTime);
         addAnimatable(selfDrawable);

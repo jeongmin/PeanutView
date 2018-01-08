@@ -15,22 +15,15 @@ public class CircleDrawable extends SelfDrawable {
     private Circle circleStart;
     private Circle circleEnd;
 
-    public CircleDrawable(@NonNull Circle circleStart, @NonNull Circle circleEnd) {
+    public CircleDrawable(@NonNull Paint paint, @NonNull Circle circleStart, @NonNull Circle circleEnd) {
         this.circleStart = circleStart;
         this.circleEnd = circleEnd;
-
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(0xff101010);
-        paint.setStrokeWidth(10);
+        this.paint = paint;
     }
 
-    public CircleDrawable(@NonNull Circle circleStart) {
+    public CircleDrawable(@NonNull Paint paint, @NonNull Circle circleStart) {
         this.circleStart = circleStart;
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(0xff101010);
-        paint.setStrokeWidth(10);
+        this.paint = paint;
     }
 
     @Override

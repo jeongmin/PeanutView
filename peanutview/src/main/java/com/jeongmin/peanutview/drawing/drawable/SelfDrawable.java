@@ -24,7 +24,10 @@ public abstract class SelfDrawable {
     protected boolean repeatAnim;           // repeat animation or not
     protected boolean onAnimating;
     protected boolean retainAfterAnimation;
-    protected @ColorInt int paintColor;
+
+    public void setPaint(@NonNull Paint paint) {
+        this.paint = paint;
+    }
 
     public void startAnimation(long startTime) {
         this.startTime = startTime + delay;
@@ -144,7 +147,9 @@ public abstract class SelfDrawable {
     }
 
     public void setPaintColor(@ColorInt int color) {
-        paint.setColor(color);
+        if (paint != null) {
+            paint.setColor(color);
+        }
     }
 
     public boolean toBeRemoved(long currentTime) {

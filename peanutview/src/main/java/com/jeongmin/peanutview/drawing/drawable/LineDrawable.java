@@ -2,6 +2,8 @@ package com.jeongmin.peanutview.drawing.drawable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.jeongmin.peanutview.drawing.shape.Line;
@@ -16,15 +18,10 @@ public class LineDrawable extends SelfDrawable {
     private Line line1;
     private Line line2;
 
-
-    public LineDrawable(Line line1, Line line2) {
+    public LineDrawable(@NonNull Paint paint, Line line1, Line line2) {
         this.line1 = line1;
         this.line2 = line2;
-
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(0xff101010);
-        paint.setStrokeWidth(10);
+        setPaint(paint);
     }
 
     @Override

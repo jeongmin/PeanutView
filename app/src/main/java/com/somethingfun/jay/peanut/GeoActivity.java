@@ -1,9 +1,11 @@
 package com.somethingfun.jay.peanut;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,7 +48,6 @@ public class GeoActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 GeoActivity.this.checkedId = checkedId;
-                clear();
             }
         });
 
@@ -70,10 +71,7 @@ public class GeoActivity extends AppCompatActivity {
                                 int duration = (int)(Math.random() * 1000);
                                 duration = (duration < 300) ? 300 : duration;
                                 ArrayList<SelfDrawable> rain = handleTouchOnRainMode(0, event.getX(), event.getY(), radius, duration, getRandomColor());
-                                mPeanutView.addToStartLine(rain);
-                                break;
-                            case R.id.radio_fire:
-                                handleFire(event);
+                                mPeanutView.startImmediate(rain);
                                 break;
                         }
                         break;
@@ -85,18 +83,23 @@ public class GeoActivity extends AppCompatActivity {
     }
 
     private void drawLine(PointF point1, PointF point2) {
-        LineDrawable lineDrawable = new LineDrawable(new Line(point1.x, point1.y, point1.x, point1.y), new Line(point1.x, point1.y, point2.x, point2.y));
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(0xff101010);
+        paint.setStrokeWidth(10);
+
+        LineDrawable lineDrawable = new LineDrawable(paint, new Line(point1.x, point1.y, point1.x, point1.y), new Line(point1.x, point1.y, point2.x, point2.y));
         lineDrawable.setAnimDuration(1000);
         lineDrawable.setRetainAfterAnimation(true);
         lineDrawable.setInterpolator(new LinearInterpolator());
         mPeanutView.addAnimatable(lineDrawable);
-        mPeanutView.addToStartLine(lineDrawable);
+        mPeanutView.startImmediate(lineDrawable);
     }
 
-    private void drawCircle(float x, float y) {
-        CircleDrawable circle = new CircleDrawable(new Circle(x, y, 15));
+    private void drawDot(float x, float y) {
+        CircleDrawable circle = new CircleDrawable(makePaint(0xff000000), new Circle(x, y, 15));
         circle.setRetainAfterAnimation(true);
-        mPeanutView.addToStartLine(circle);
+        mPeanutView.startImmediate(circle);
     }
 
     private void handleTouchOnLineMode(MotionEvent event) {
@@ -108,40 +111,37 @@ public class GeoActivity extends AppCompatActivity {
             point1 = null;
             point2 = null;
         }
-        drawCircle(event.getX(), event.getY());
+        drawDot(event.getX(), event.getY());
     }
 
     private void handleTouchOnCircleMode(MotionEvent event, int radius, int duration) {
-        CircleDrawable circle1 = new CircleDrawable(new Circle(event.getX(), event.getY(), 0), new Circle(event.getX(), event.getY(), radius - 60));
+        CircleDrawable circle1 = new CircleDrawable(makePaint(getRandomColor()), new Circle(event.getX(), event.getY(), 0), new Circle(event.getX(), event.getY(), radius - 60));
         circle1.setRetainAfterAnimation(false);
         circle1.setAnimDuration(duration);
         circle1.setAlphaAnim(1, 0);
         circle1.setInterpolator(new LinearInterpolator());
-        circle1.setPaintColor(getRandomColor());
         circle1.repeatAnim(true);
 
-        CircleDrawable circle2 = new CircleDrawable(new Circle(event.getX(), event.getY(), 0), new Circle(event.getX(), event.getY(), radius - 30));
+        CircleDrawable circle2 = new CircleDrawable(makePaint(getRandomColor()), new Circle(event.getX(), event.getY(), 0), new Circle(event.getX(), event.getY(), radius - 30));
         circle2.setRetainAfterAnimation(false);
         circle2.setAnimDuration(duration);
         circle2.setDelay(100);
         circle2.setAlphaAnim(1, 0);
         circle2.setInterpolator(new LinearInterpolator());
-        circle2.setPaintColor(getRandomColor());
         circle2.repeatAnim(true);
 
-        CircleDrawable circle3 = new CircleDrawable(new Circle(event.getX(), event.getY(), 0), new Circle(event.getX(), event.getY(), radius));
+        CircleDrawable circle3 = new CircleDrawable(makePaint(getRandomColor()), new Circle(event.getX(), event.getY(), 0), new Circle(event.getX(), event.getY(), radius));
         circle3.setRetainAfterAnimation(false);
         circle3.setAnimDuration(duration);
         circle3.setDelay(200);
         circle3.setAlphaAnim(1, 0);
         circle3.setInterpolator(new LinearInterpolator());
-        circle3.setPaintColor(getRandomColor());
         circle3.repeatAnim(true);
 
 
-        mPeanutView.addToStartLine(circle1);
-        mPeanutView.addToStartLine(circle2);
-        mPeanutView.addToStartLine(circle3);
+        mPeanutView.startImmediate(circle1);
+        mPeanutView.startImmediate(circle2);
+        mPeanutView.startImmediate(circle3);
     }
 
     private @ColorInt
@@ -151,20 +151,24 @@ public class GeoActivity extends AppCompatActivity {
     }
 
     private ArrayList<SelfDrawable> handleTouchOnRainMode(int startDelay, float x, float y, float radius, int duration, @ColorInt int color) {
-        LineDrawable lineDrawable = new LineDrawable(new Line(x, 0, x, 0),new Line(x, 0, x, y));
-        lineDrawable.setPaintColor(color);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(color);
+        paint.setStrokeWidth(10);
+
+        LineDrawable lineDrawable = new LineDrawable(paint, new Line(x, 0, x, 0),new Line(x, 0, x, y));
         lineDrawable.setAnimDuration(duration);
         lineDrawable.setAlphaAnim(0.5f, 1);
         lineDrawable.setDelay(startDelay);
         lineDrawable.setInterpolator(new AccelerateInterpolator());
 
-        LineDrawable lineDrawable2 = new LineDrawable(new Line(x, 0, x, y),new Line(x, y, x, y));
+        LineDrawable lineDrawable2 = new LineDrawable(paint, new Line(x, 0, x, y),new Line(x, y, x, y));
         lineDrawable2.setPaintColor(color);
         lineDrawable2.setAnimDuration(duration / 2);
         lineDrawable2.setDelay(duration + startDelay);
         lineDrawable2.setInterpolator(new AccelerateInterpolator());
 
-        CircleDrawable circleDrawable = new CircleDrawable(new Circle(x, y, 0), new Circle(x, y, radius));
+        CircleDrawable circleDrawable = new CircleDrawable(makePaint(getRandomColor()), new Circle(x, y, 0), new Circle(x, y, radius));
         circleDrawable.setPaintColor(color);
         circleDrawable.setAlphaAnim(0.3f, 1);
         circleDrawable.setAnimDuration(duration);
@@ -184,114 +188,16 @@ public class GeoActivity extends AppCompatActivity {
         point2 = null;
     }
 
-    private ArrayList<SelfDrawable> handleTouchOnFireMode(int startDelay, float x, float y, float radius, int duration, @ColorInt int color) {
-        long animTime;
-        LineDrawable lineDrawable = new LineDrawable(new Line(x, 0, x, 0),new Line(x, 0, x, y));
-        lineDrawable.setPaintColor(color);
-        lineDrawable.setAnimDuration(duration);
-        lineDrawable.setAlphaAnim(0.5f, 1);
-        lineDrawable.setDelay(startDelay);
-        lineDrawable.setInterpolator(new AccelerateInterpolator());
-
-        LineDrawable lineDrawable2 = new LineDrawable(new Line(x, 0, x, y),new Line(x, y, x, y));
-        lineDrawable2.setPaintColor(color);
-        lineDrawable2.setAnimDuration(duration / 2);
-        lineDrawable2.setDelay(duration + startDelay);
-        lineDrawable2.setInterpolator(new AccelerateInterpolator());
-        animTime = lineDrawable2.getDelay() + lineDrawable2.getDuration();
-
-        int halfLen = (int)(radius / 2);
-        LineDrawable line1 = new LineDrawable(new Line(x, y, x, y),new Line(x - halfLen, y, x + halfLen, y));
-        line1.setPaintColor(getRandomColor());
-        line1.setAnimDuration(duration);
-        line1.setDelay(animTime);
-        line1.setInterpolator(new AccelerateInterpolator());
-
-        LineDrawable line2 = new LineDrawable(new Line(x, y, x, y),new Line(x, y - halfLen, x, y + halfLen));
-        line2.setPaintColor(getRandomColor());
-        line2.setAnimDuration(duration);
-        line2.setDelay(animTime);
-        line2.setInterpolator(new AccelerateInterpolator());
-
-        float leftX = x - halfLen;
-        float leftY = getY(1, x, y, leftX);
-        float rightX = x + halfLen;
-        float rightY = getY(1, x, y, rightX);
-        LineDrawable line3 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
-        line3.setPaintColor(getRandomColor());
-        line3.setAnimDuration(duration);
-        line3.setDelay(animTime);
-        line3.setInterpolator(new AccelerateInterpolator());
-
-
-        leftY = getY(-1, x, y, leftX);
-        rightY = getY(-1, x, y, rightX);
-        LineDrawable line4 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
-        line4.setPaintColor(getRandomColor());
-        line4.setAnimDuration(duration);
-        line4.setDelay(animTime);
-        line4.setInterpolator(new AccelerateInterpolator());
-
-        leftY = getY(0.5f, x, y, leftX);
-        rightY = getY(0.5f, x, y, rightX);
-        LineDrawable line5 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
-        line5.setPaintColor(getRandomColor());
-        line5.setAnimDuration(duration);
-        line5.setDelay(animTime);
-        line5.setInterpolator(new AccelerateInterpolator());
-
-        leftY = getY(-0.5f, x, y, leftX);
-        rightY = getY(-0.5f, x, y, rightX);
-        LineDrawable line6 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
-        line6.setPaintColor(getRandomColor());
-        line6.setAnimDuration(duration);
-        line6.setDelay(animTime);
-        line6.setInterpolator(new AccelerateInterpolator());
-
-        leftY = getY(2f, x, y, leftX);
-        rightY = getY(2f, x, y, rightX);
-        LineDrawable line7 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
-        line7.setPaintColor(getRandomColor());
-        line7.setAnimDuration(duration);
-        line7.setDelay(animTime);
-        line7.setInterpolator(new AccelerateInterpolator());
-
-        leftY = getY(-2f, x, y, leftX);
-        rightY = getY(-2f, x, y, rightX);
-        LineDrawable line8 = new LineDrawable(new Line(x, y, x, y),new Line(leftX, leftY, rightX, rightY));
-        line8.setPaintColor(getRandomColor());
-        line8.setAnimDuration(duration);
-        line8.setDelay(animTime);
-        line8.setInterpolator(new AccelerateInterpolator());
-
-
-        ArrayList<SelfDrawable> rain = new ArrayList<>();
-        rain.add(lineDrawable);
-        rain.add(lineDrawable2);
-        rain.add(line1);
-        rain.add(line2);
-        rain.add(line3);
-        rain.add(line4);
-
-//        rain.add(line5);
-//        rain.add(line6);
-//        rain.add(line7);
-//        rain.add(line8);
-
-        return rain;
-    }
-
     private float getY(float a, float x1, float y1, float x2) {
         return ((x2 - x1) * a) + y1;
     }
 
-    private void handleFire(MotionEvent event) {
-        int radius = (int)(Math.random() * 200);
-        radius = (radius < 100) ? 150 : radius;
-
-        int duration = (int)(Math.random() * 1000);
-        duration = (duration < 300) ? 300 : duration;
-        ArrayList<SelfDrawable> rain = handleTouchOnFireMode(0, event.getX(), event.getY(), radius, duration, getRandomColor());
-        mPeanutView.addToStartLine(rain);
+    @NonNull
+    private Paint makePaint(@ColorInt int colorInt) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(colorInt);
+        paint.setStrokeWidth(10);
+        return paint;
     }
 }

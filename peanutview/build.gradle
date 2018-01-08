@@ -11,7 +11,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
-        versionName "0.0.1"
+        versionName "0.0.2"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -36,13 +36,15 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
 
-
+tasks.withType(Javadoc).all {
+    enabled = false
+}
 
 publish {
     userOrg = 'anitoy'
     groupId = 'com.jeongmin.library'
     artifactId = 'peanutview'
-    publishVersion = '0.0.1'
+    publishVersion = '0.0.2'
     desc = 'PeanutView is a simple shape motion graphic library'
     website = 'https://github.com/jeongmin/PeanutView'
     repository = 'https://github.com/jeongmin/PeanutView.git'
