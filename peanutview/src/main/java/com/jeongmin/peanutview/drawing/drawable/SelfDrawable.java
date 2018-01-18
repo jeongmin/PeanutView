@@ -6,6 +6,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.view.animation.Interpolator;
 
+import com.jeongmin.peanutview.drawing.event.OnAnimationEnd;
 import com.jeongmin.peanutview.transition.AlphaTransition;
 
 
@@ -24,6 +25,8 @@ public abstract class SelfDrawable {
     protected boolean repeatAnim;           // repeat animation or not
     protected boolean onAnimating;
     protected boolean retainAfterAnimation;
+
+    protected OnAnimationEnd onAnimationEndEvent;
 
     public void setPaint(@NonNull Paint paint) {
         this.paint = paint;
@@ -91,9 +94,17 @@ public abstract class SelfDrawable {
             }
 
             // repeat
-            if (justStoppedAnimating && repeatAnim) {
-                startAnimation(System.currentTimeMillis());
+            if (justStoppedAnimating) {
+                if (repeatAnim) {
+                    startAnimation(System.currentTimeMillis());
+                } else {
+                    if (onAnimationEndEvent != null) {
+                        onAnimationEndEvent.onAnimationEnd();
+                    }
+                }
             }
+
+
         }
 
         return shouldInvalidate();
@@ -159,5 +170,9 @@ public abstract class SelfDrawable {
     private boolean shouldAnimate(long currentTime) {
         long animEndTime = startTime + duration;
         return startTime <= currentTime && animEndTime > currentTime;
+    }
+
+    public void setOnAnimationEndListener(OnAnimationEnd listener) {
+        onAnimationEndEvent = listener;
     }
 }
