@@ -18,6 +18,8 @@ import java.util.List;
 public class PeanutView extends View {
 
     private ArrayList<SelfDrawable> selfDrawableList;
+    private ArrayList<SelfDrawable> drawableListToRemove;
+    private ArrayList<SelfDrawable> drawableListToAdd;
 
     public PeanutView(Context context) {
         super(context);
@@ -36,6 +38,8 @@ public class PeanutView extends View {
 
     private void init() {
         selfDrawableList = new ArrayList<>();
+        drawableListToAdd = new ArrayList<>();
+        drawableListToRemove = new ArrayList<>();
     }
 
     /**
@@ -43,9 +47,13 @@ public class PeanutView extends View {
      * @param selfDrawable
      */
     public void addAnimatable(SelfDrawable selfDrawable) {
-        if (selfDrawableList != null) {
-            selfDrawableList.add(selfDrawable);
-        }
+        drawableListToAdd.add(selfDrawable);
+        invalidate();
+    }
+
+    public void removeAnimatable(SelfDrawable selfDrawable) {
+        drawableListToRemove.add(selfDrawable);
+        invalidate();
     }
 
     public void startAnimation() {
@@ -62,7 +70,6 @@ public class PeanutView extends View {
             return;
         }
 
-        ArrayList<SelfDrawable> toRemove = new ArrayList<>();
         boolean needInvalidate = false;
         long currentTime = System.currentTimeMillis();
         for (SelfDrawable selfDrawable : selfDrawableList) {
@@ -71,11 +78,22 @@ public class PeanutView extends View {
             }
 
             if (selfDrawable.toBeRemoved(currentTime)) {
-                toRemove.add(selfDrawable);
+                drawableListToRemove.add(selfDrawable);
             }
         }
 
-        selfDrawableList.removeAll(toRemove);
+        if (drawableListToRemove.size() > 0) {
+            needInvalidate = true;
+            selfDrawableList.removeAll(drawableListToRemove);
+            drawableListToRemove.clear();
+        }
+
+        if (drawableListToAdd.size() > 0) {
+            needInvalidate = true;
+            selfDrawableList.addAll(drawableListToAdd);
+            drawableListToAdd.clear();
+        }
+
 
         if (needInvalidate) {
             invalidate();
@@ -92,7 +110,6 @@ public class PeanutView extends View {
             selfDrawable.startAnimation(currentTime);
             addAnimatable(selfDrawable);
         }
-        invalidate();
     }
 
     /**
@@ -103,11 +120,12 @@ public class PeanutView extends View {
         long currentTime = System.currentTimeMillis();
         selfDrawable.startAnimation(currentTime);
         addAnimatable(selfDrawable);
-        invalidate();
     }
 
     public void clear() {
         selfDrawableList.clear();
+        drawableListToAdd.clear();
+        drawableListToRemove.clear();
         invalidate();
     }
 }
