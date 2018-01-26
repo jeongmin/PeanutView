@@ -3,20 +3,26 @@ package com.somethingfun.jay.peanut;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.RadioGroup;
 
+import com.jeongmin.peanutview.drawing.drawable.ArcDrawable;
 import com.jeongmin.peanutview.drawing.drawable.CircleDrawable;
 import com.jeongmin.peanutview.drawing.drawable.LineDrawable;
 import com.jeongmin.peanutview.drawing.drawable.SelfDrawable;
+import com.jeongmin.peanutview.drawing.event.OnAnimationEnd;
+import com.jeongmin.peanutview.drawing.shape.Arc;
 import com.jeongmin.peanutview.drawing.shape.Circle;
 import com.jeongmin.peanutview.drawing.shape.Line;
 import com.jeongmin.peanutview.view.PeanutView;
@@ -65,14 +71,21 @@ public class GeoActivity extends AppCompatActivity {
                                 handleTouchOnLineMode(event);
                                 break;
                             case R.id.radio_rain:
-                                int radius = (int)(Math.random() * 200);
-                                radius = (radius < 100) ? 150 : radius;
-
-                                int duration = (int)(Math.random() * 1000);
-                                duration = (duration < 300) ? 300 : duration;
-                                ArrayList<SelfDrawable> rain = handleTouchOnRainMode(0, event.getX(), event.getY(), radius, duration, getRandomColor());
+                                ArrayList<SelfDrawable> rain = handleTouchOnRainMode(0, event.getX(), event.getY(), getRandomRadius(), getRandomDuration(), getRandomColor());
                                 mPeanutView.startImmediate(rain);
                                 break;
+                            case R.id.radio_robbi:
+                                ArrayList<SelfDrawable> robbi = handleTouchOnRobbiMode(0, event.getX(), event.getY(), getRandomRadius(), getRandomDuration(), getRandomColor());
+                                mPeanutView.startImmediate(robbi);
+                                break;
+                            case R.id.radio_wav:
+                                ArrayList<SelfDrawable> wav = handleTouchOnWAV(event.getX(), event.getY(), getRandomDuration(), getRandomColor());
+                                mPeanutView.startImmediate(wav);
+                                break;
+                            case R.id.radio_oval:
+                                handleTouchOnOvalMode(event, 100, 3000);
+                                break;
+
                         }
                         break;
                 }
@@ -144,6 +157,185 @@ public class GeoActivity extends AppCompatActivity {
         mPeanutView.startImmediate(circle3);
     }
 
+    private void handleTouchOnOvalMode(MotionEvent event, int radius, int duration) {
+        Arc start = new Arc();
+        Arc end   = new Arc();
+
+        start.oval = new RectF(event.getX() - radius, event.getY() - radius, event.getX() + radius, event.getY() + radius);
+        start.startAngle = 0;
+        start.sweepAngle = 0;
+        start.useCenter = true;
+
+        end.oval = new RectF(event.getX() - radius, event.getY() - radius, event.getX() + radius, event.getY() + radius);
+        end.startAngle = 0;
+        end.sweepAngle = 360;
+        end.useCenter = true;
+
+
+        ArcDrawable oval = new ArcDrawable(makeOvalPaint(getRandomColor()), start, end);
+        if (oval.getPaint().getStyle() == Paint.Style.STROKE) {
+            oval.useCenter = false;
+            oval.direction = ArcDrawable.DIRECTION_RIGHT;
+        } else {
+            oval.useCenter = true;
+            oval.direction = ArcDrawable.DIRECTION_LEFT;
+        }
+        oval.setAnimDuration(duration);
+
+
+        oval.setInterpolator(new LinearInterpolator());
+
+        mPeanutView.startImmediate(oval);
+    }
+
+
+    private ArrayList<SelfDrawable> handleTouchOnRobbiMode(int startDelay, float x, float y, final float radius, final int duration, @ColorInt int color) {
+        final Paint paintCircle = makePaint(color);
+
+        final Circle circleFirst = new Circle(x, y, radius);
+        final CircleDrawable circleDrawable = new CircleDrawable(paintCircle, new Circle(x, y, 0), circleFirst);
+        circleDrawable.setAlphaAnim(0.3f, 1);
+        circleDrawable.setAnimDuration(duration);
+        circleDrawable.setDelay(startDelay);
+        circleDrawable.setRetainAfterAnimation(true);
+        circleDrawable.setInterpolator(new OvershootInterpolator(3.0f));
+
+
+        Paint paintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintLine.setStyle(Paint.Style.STROKE);
+        paintLine.setColor(color);
+        paintLine.setStrokeWidth(10);
+
+        float lineY = y - radius;
+        LineDrawable lineDrawable = new LineDrawable(paintLine, new Line(x, 0, x, 0),new Line(x, 0, x, lineY));
+        lineDrawable.setAnimDuration(duration);
+        lineDrawable.setAlphaAnim(0.5f, 1);
+        lineDrawable.setDelay(circleDrawable.getDelay() + circleDrawable.getDuration());
+        lineDrawable.setInterpolator(new AccelerateInterpolator());
+
+        LineDrawable lineDrawable2 = new LineDrawable(paintLine, new Line(x, 0, x, lineY),new Line(x, lineY, x, lineY));
+        lineDrawable2.setPaintColor(color);
+        lineDrawable2.setAnimDuration(duration / 2);
+        lineDrawable2.setDelay(lineDrawable.getDelay() + lineDrawable.getDuration() );
+        lineDrawable2.setInterpolator(new AccelerateInterpolator());
+        lineDrawable2.setOnAnimationEndListener(new OnAnimationEnd() {
+            @Override
+            public void onAnimationEnd() {
+                mPeanutView.removeAnimatable(circleDrawable);
+
+                CircleDrawable newCircleDrawable = new CircleDrawable(paintCircle,  circleFirst, new Circle(circleFirst.getCx(), mPeanutView.getHeight() - radius, radius));
+                newCircleDrawable.setAnimDuration(duration);
+                newCircleDrawable.setInterpolator(new BounceInterpolator());
+                newCircleDrawable.setRetainAfterAnimation(true);
+                mPeanutView.startImmediate(newCircleDrawable);
+
+                mPeanutView.invalidate();
+            }
+        });
+
+
+        ArrayList<SelfDrawable> rain = new ArrayList<>();
+        rain.add(circleDrawable);
+        rain.add(lineDrawable);
+        rain.add(lineDrawable2);
+
+        return rain;
+    }
+
+    private ArrayList<SelfDrawable> handleTouchOnWAV(float x, float y, final int duration, @ColorInt int color) {
+
+
+        float left = x - 140;
+        float right = x + 100;
+        float top = y - 50;
+        float bottom = y + 50;
+
+
+
+        float distanceW = 34;
+        int wColor = getRandomColor();
+        final Paint wPaint = makePaint(getRandomColor());
+        LineDrawable line1 = new LineDrawable(wPaint, new Line(left, top, left, top), new Line(left, top, left + distanceW, bottom));
+        line1.setInterpolator(new LinearInterpolator());
+        line1.setPaint(wPaint);
+        line1.setAnimDuration(duration);
+        line1.setRetainAfterAnimation(true);
+
+        LineDrawable line2 = new LineDrawable(wPaint, new Line(left + distanceW, bottom, left + distanceW, bottom), new Line(left + distanceW, bottom, left + distanceW * 2, top));
+        line2.setInterpolator(new LinearInterpolator());
+        line2.setPaint(wPaint);
+        line2.setAnimDuration(duration);
+        line2.setRetainAfterAnimation(true);
+
+
+        LineDrawable line3 = new LineDrawable(wPaint, new Line(left + distanceW * 2, top, left + distanceW * 2, top), new Line(left + distanceW * 2, top, left + distanceW * 3, bottom));
+        line3.setInterpolator(new LinearInterpolator());
+        line3.setPaint(wPaint);
+        line3.setPaintColor(wColor);
+        line3.setAnimDuration(duration);
+        line3.setRetainAfterAnimation(true);
+
+        LineDrawable line4 = new LineDrawable(wPaint, new Line(left + distanceW * 3, bottom, left + distanceW * 3, bottom), new Line(left + distanceW * 3, bottom, left + distanceW * 4, top));
+        line4.setInterpolator(new LinearInterpolator());
+        line4.setPaint(wPaint);
+        line4.setPaintColor(wColor);
+        line4.setAnimDuration(duration);
+        line4.setRetainAfterAnimation(true);
+
+        float topLineY = top - 20;
+        float aStartX = left + distanceW * 4 + 30;
+        Paint topLinePaint = makePaint(getRandomColor());
+        LineDrawable line5 = new LineDrawable(topLinePaint, new Line(aStartX, topLineY, aStartX, topLineY), new Line(aStartX, topLineY, aStartX + distanceW * 2, topLineY));
+        line5.setInterpolator(new LinearInterpolator());
+        line5.setPaint(topLinePaint);
+        line5.setAnimDuration(duration);
+        line5.setRetainAfterAnimation(true);
+
+        Paint aPaint = makePaint(getRandomColor());
+        LineDrawable line6 = new LineDrawable(aPaint, new Line(aStartX + distanceW, top, aStartX + distanceW, top), new Line(aStartX + distanceW, top, aStartX, bottom));
+        line6.setInterpolator(new LinearInterpolator());
+        line6.setPaint(aPaint);
+        line6.setAnimDuration(duration);
+        line6.setRetainAfterAnimation(true);
+
+        LineDrawable line7 = new LineDrawable(aPaint, new Line(aStartX + distanceW, top, aStartX + distanceW, top), new Line(aStartX + distanceW, top, aStartX + distanceW * 2, bottom));
+        line7.setInterpolator(new LinearInterpolator());
+        line7.setPaint(aPaint);
+        line7.setAnimDuration(duration);
+        line7.setRetainAfterAnimation(true);
+
+        float vStartX = aStartX + distanceW * 2 + 30;
+        Paint vPaint = makePaint(getRandomColor());
+        LineDrawable line8 = new LineDrawable(vPaint, new Line(vStartX, top, vStartX, top), new Line(vStartX, top, vStartX + distanceW, bottom));
+        line8.setInterpolator(new LinearInterpolator());
+        line8.setPaint(vPaint);
+        line8.setAnimDuration(duration);
+        line8.setRetainAfterAnimation(true);
+
+        LineDrawable line9 = new LineDrawable(vPaint, new Line(vStartX + distanceW, bottom, vStartX + distanceW, bottom), new Line(vStartX + distanceW, bottom, vStartX + distanceW * 2, top));
+        line9.setInterpolator(new LinearInterpolator());
+        line9.setPaint(vPaint);
+        line9.setAnimDuration(duration);
+        line9.setRetainAfterAnimation(true);
+
+
+
+        ArrayList<SelfDrawable> wav = new ArrayList<>();
+        wav.add(line1);
+        wav.add(line2);
+        wav.add(line3);
+        wav.add(line4);
+        wav.add(line5);
+        wav.add(line6);
+        wav.add(line7);
+        wav.add(line8);
+        wav.add(line9);
+
+        return wav;
+    }
+
+
+
     private @ColorInt
     int getRandomColor() {
         Random rnd = new Random();
@@ -198,6 +390,41 @@ public class GeoActivity extends AppCompatActivity {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(colorInt);
         paint.setStrokeWidth(10);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setAntiAlias(true);
         return paint;
+    }
+
+    private Paint makeOvalPaint(@ColorInt int colorInt) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Random r = new Random();
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        int random = Math.abs(r.nextInt());
+        int remain = random % 3;
+
+        Log.d("jm.lee", "random : " + random + ", remain : " + remain);
+        if (remain == 0) {
+            paint.setStyle(Paint.Style.FILL);
+        } else if (remain == 1) {
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(10);
+        } else {
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);
+            paint.setStrokeWidth(10);
+        }
+
+        paint.setColor(colorInt);
+        paint.setAntiAlias(true);
+        return paint;
+    }
+
+    private int getRandomRadius() {
+        int radius = (int)(Math.random() * 200);
+        return (radius < 100) ? 150 : radius;
+    }
+
+    private int getRandomDuration() {
+        int duration = (int)(Math.random() * 1200);
+        return (duration < 500) ? 500 : duration;
     }
 }

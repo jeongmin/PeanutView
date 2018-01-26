@@ -15,12 +15,12 @@
             android:padding="10dp"
             android:gravity="center_vertical"
             >
+
                 <RadioButton
                     android:id="@+id/radio_rain"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rain"
-                    android:paddingRight="10dp"
                     android:checked="true"
                     />
 
@@ -29,7 +29,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Line"
-                    android:paddingRight="10dp"
                     />
 
                 <RadioButton
@@ -37,15 +36,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Circle"
-                    android:paddingRight="10dp"
                     />
-                <Button
-                    android:id="@+id/clear"
+
+                <RadioButton
+                    android:id="@+id/radio_robbi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Clear"
+                    android:text="Robbi"
                     />
+
+                <RadioButton
+                    android:id="@+id/radio_wav"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WAV"
+
+                    />
+                <RadioButton
+                    android:id="@+id/radio_oval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Oval"
+
+                    />
+
+
+
         </RadioGroup>
+        <Button
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            />
 
 
         <com.jeongmin.peanutview.view.PeanutView
