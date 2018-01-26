@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.animation.Interpolator;
 
 import com.jeongmin.peanutview.drawing.event.OnAnimationEnd;
@@ -24,6 +25,7 @@ public abstract class SelfDrawable {
     protected long delay;                   // delay before starting
     protected boolean repeatAnim;           // repeat animation or not
     protected boolean onAnimating;
+    protected boolean isTheLastAnimationFrame; // We need to show the last frame
     protected boolean retainAfterAnimation;
 
     protected OnAnimationEnd onAnimationEndEvent;
@@ -82,12 +84,19 @@ public abstract class SelfDrawable {
         }
 
         boolean shouldAnimate = shouldAnimate(currentTime);
-        boolean justStoppedAnimating = onAnimating && shouldAnimate == false;
-        onAnimating = shouldAnimate;
+        boolean justStoppedAnimating = onAnimating && !shouldAnimate;
+        isTheLastAnimationFrame = (justStoppedAnimating && !isTheLastAnimationFrame);
+        onAnimating = isTheLastAnimationFrame || shouldAnimate;
         if (onAnimating) {
             long timeProceed = currentTime - startTime;
             float interpolation = getInterpolation(timeProceed / (float) duration);
+            if (isTheLastAnimationFrame) {
+                interpolation = 1;
+            }
             drawInAnimation(canvas, interpolation);
+            if (isTheLastAnimationFrame) {
+                Log.d("jm.lee", "draw last");
+            }
         } else {
             if (retainAfterAnimation) {
                 drawLastState(canvas);
@@ -174,5 +183,9 @@ public abstract class SelfDrawable {
 
     public void setOnAnimationEndListener(OnAnimationEnd listener) {
         onAnimationEndEvent = listener;
+    }
+
+    public Paint getPaint() {
+        return paint;
     }
 }
