@@ -2,8 +2,8 @@ package com.jeongmin.peanutview.drawing.drawable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 
 import com.jeongmin.peanutview.drawing.shape.Arc;
 

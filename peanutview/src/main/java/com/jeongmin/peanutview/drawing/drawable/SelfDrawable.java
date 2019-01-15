@@ -2,8 +2,8 @@ package com.jeongmin.peanutview.drawing.drawable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.animation.Interpolator;
 

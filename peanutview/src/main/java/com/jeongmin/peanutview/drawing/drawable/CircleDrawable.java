@@ -2,7 +2,7 @@ package com.jeongmin.peanutview.drawing.drawable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.jeongmin.peanutview.drawing.shape.Circle;
 
