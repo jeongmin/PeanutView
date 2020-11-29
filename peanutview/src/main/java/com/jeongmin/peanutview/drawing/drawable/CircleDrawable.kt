@@ -1,62 +1,63 @@
-package com.jeongmin.peanutview.drawing.drawable;
+package com.jeongmin.peanutview.drawing.drawable
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import androidx.annotation.NonNull;
-
-import com.jeongmin.peanutview.drawing.shape.Circle;
+import android.graphics.Canvas
+import android.graphics.Paint
+import com.jeongmin.peanutview.drawing.shape.Circle
 
 /**
  * Created by jay on 17. 11. 11.
  */
-
-public class CircleDrawable extends SelfDrawable {
-
-    private Circle circleStart;
-    private Circle circleEnd;
-
-    public CircleDrawable(@NonNull Paint paint, @NonNull Circle circleStart, @NonNull Circle circleEnd) {
-        this.circleStart = circleStart;
-        this.circleEnd = circleEnd;
-        this.paint = paint;
+class CircleDrawable : SelfDrawable {
+    interface DrawEvent {
+        fun onDraw(cx: Float, cy: Float, radius: Float)
     }
 
-    public CircleDrawable(@NonNull Paint paint, @NonNull Circle circleStart) {
-        this.circleStart = circleStart;
-        this.paint = paint;
+    var circleStart: Circle
+    var circleEnd: Circle? = null
+    var drawEvent: DrawEvent? = null
+
+    var tX: Float? = null
+    var tY: Float? = null
+
+    constructor(paint: Paint, circleStart: Circle, circleEnd: Circle) {
+        this.circleStart = circleStart
+        this.circleEnd = circleEnd
+        this.paint = paint
     }
 
-    @Override
-    protected void drawInitialState(Canvas canvas) {
-        canvas.drawCircle(circleStart.getCx(), circleStart.getCy(), circleStart.getRadius(), paint);
+    constructor(paint: Paint, circleStart: Circle) {
+        this.circleStart = circleStart
+        this.paint = paint
     }
 
-    @Override
-    protected void drawLastState(Canvas canvas) {
+    override fun drawInitialState(canvas: Canvas) {
+        canvas.drawCircle(circleStart.cx, circleStart.cy, circleStart.radius, paint)
+    }
+
+    override fun drawLastState(canvas: Canvas) {
         if (circleEnd == null) {
-            drawInitialState(canvas);
-            return;
+            drawInitialState(canvas)
+            return
         }
-
-        canvas.drawCircle(circleEnd.getCx(), circleEnd.getCy(), circleEnd.getRadius(), paint);
+        canvas.drawCircle(circleEnd!!.cx, circleEnd!!.cy, circleEnd!!.radius, paint)
     }
 
-    @Override
-    protected void drawInAnimation(Canvas canvas, float interpolation) {
+    override fun drawInAnimation(canvas: Canvas, interpolation: Float) {
         if (circleEnd == null) {
-            drawInitialState(canvas);
-            return;
+            drawInitialState(canvas)
+            return
         }
+        val deltaCx = circleEnd!!.cx - circleStart.cx
+        val deltaCy = circleEnd!!.cy - circleStart.cy
+        val deltaRadius = circleEnd!!.radius - circleStart.radius
+        val toCx = deltaCx * interpolation + circleStart.cx
+        val toCy = deltaCy * interpolation + circleStart.cy
+        val toRadius = deltaRadius * interpolation + circleStart.radius
+        setAlpha(alphaAnim, paint, interpolation)
+        canvas.drawCircle(toCx, toCy, toRadius, paint)
 
-        float deltaCx     = circleEnd.getCx() - circleStart.getCx();
-        float deltaCy     = circleEnd.getCy() - circleStart.getCy();
-        float deltaRadius = circleEnd.getRadius() - circleStart.getRadius();
-
-        float toCx   = deltaCx * interpolation + circleStart.getCx();
-        float toCy   = deltaCy * interpolation + circleStart.getCy();
-        float toRadius = deltaRadius * interpolation + circleStart.getRadius();
-
-        setAlpha(alphaAnim, paint, interpolation);
-        canvas.drawCircle(toCx, toCy, toRadius, paint);
+        drawEvent?.onDraw(toCx, toCy, toRadius)
+        tX = toCx
+        tY = toCy
     }
 }

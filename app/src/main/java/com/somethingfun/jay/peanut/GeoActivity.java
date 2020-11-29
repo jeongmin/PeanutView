@@ -1,5 +1,6 @@
 package com.somethingfun.jay.peanut;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -38,6 +39,7 @@ public class GeoActivity extends AppCompatActivity {
 
     private int checkedId = R.id.radio_rain;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +87,11 @@ public class GeoActivity extends AppCompatActivity {
                             case R.id.radio_oval:
                                 handleTouchOnOvalMode(event, 100, 3000);
                                 break;
-
+                            case R.id.radio_fractal_tree:
+                                handleTouchOnFactalMode(event, 90, 100);
+                                break;
+                            default:
+                                break;
                         }
                         break;
                 }
@@ -334,6 +340,32 @@ public class GeoActivity extends AppCompatActivity {
         return wav;
     }
 
+    private void handleTouchOnFactalMode(MotionEvent event, int angle, int duration) {
+        fractalTree(event.getX(), event.getY(), 200, 90, 8);
+    }
+
+    private void fractalTree(float x, float y, float length, int angle, int order) {
+        if (order <= 0) {
+            return;
+        }
+
+        float x2 = (float)(x + (Math.cos(Math.toRadians(angle)) * length));
+        float y2 = (float)(y - (Math.sin(Math.toRadians(angle)) * length));
+
+        int duration = getRandomDuration();
+        final Paint paint = makePaint(getRandomColor());
+        LineDrawable lineDrawable = new LineDrawable(paint, new Line(x, y, x, y), new Line(x, y, x2, y2));
+        lineDrawable.setInterpolator(new LinearInterpolator());
+        lineDrawable.setPaint(paint);
+        lineDrawable.setAnimDuration(duration);
+        lineDrawable.setRetainAfterAnimation(true);
+
+        mPeanutView.startImmediate(lineDrawable);
+
+        fractalTree(x2, y2, length * 0.8f, angle - 30, order - 1);
+        fractalTree(x2, y2, length * 0.8f, angle + 30, order - 1);
+    }
+
 
 
     private @ColorInt
@@ -425,6 +457,6 @@ public class GeoActivity extends AppCompatActivity {
 
     private int getRandomDuration() {
         int duration = (int)(Math.random() * 1200);
-        return (duration < 500) ? 500 : duration;
+        return Math.max(duration, 500);
     }
 }

@@ -10,12 +10,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".GeoActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".GeoActivity">
+        </activity>
+
+        <activity android:name=".CanvasActivity">
+        </activity>
+
+        <activity android:name=".BezierActivity">
         </activity>
     </application>
 

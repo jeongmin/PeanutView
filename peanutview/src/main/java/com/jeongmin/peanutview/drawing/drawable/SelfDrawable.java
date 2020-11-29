@@ -26,7 +26,8 @@ public abstract class SelfDrawable {
     protected boolean repeatAnim;           // repeat animation or not
     protected boolean onAnimating;
     protected boolean isTheLastAnimationFrame; // We need to show the last frame
-    protected boolean retainAfterAnimation;
+    protected boolean retainAfterAnimation = true;
+    protected float interpolation = 0F;
 
     protected OnAnimationEnd onAnimationEndEvent;
 
@@ -89,17 +90,16 @@ public abstract class SelfDrawable {
         onAnimating = isTheLastAnimationFrame || shouldAnimate;
         if (onAnimating) {
             long timeProceed = currentTime - startTime;
-            float interpolation = getInterpolation(timeProceed / (float) duration);
+            interpolation = getInterpolation(timeProceed / (float) duration);
             if (isTheLastAnimationFrame) {
                 interpolation = 1;
             }
             drawInAnimation(canvas, interpolation);
-            if (isTheLastAnimationFrame) {
-                Log.d("jm.lee", "draw last");
-            }
         } else {
             if (retainAfterAnimation) {
                 drawLastState(canvas);
+            } else {
+                interpolation = 0F;
             }
 
             // repeat
@@ -112,8 +112,6 @@ public abstract class SelfDrawable {
                     }
                 }
             }
-
-
         }
 
         return shouldInvalidate();
@@ -173,7 +171,7 @@ public abstract class SelfDrawable {
     }
 
     public boolean toBeRemoved(long currentTime) {
-        return currentTime >= (startTime + duration) && onAnimating == false && retainAfterAnimation == false;
+        return currentTime >= (startTime + duration) && !onAnimating && !retainAfterAnimation;
     }
 
     private boolean shouldAnimate(long currentTime) {
@@ -187,5 +185,9 @@ public abstract class SelfDrawable {
 
     public Paint getPaint() {
         return paint;
+    }
+
+    public float getInterpolation() {
+        return interpolation;
     }
 }

@@ -1,58 +1,51 @@
-package com.jeongmin.peanutview.drawing.drawable;
+package com.jeongmin.peanutview.drawing.drawable
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import android.util.Log;
-
-import com.jeongmin.peanutview.drawing.shape.Line;
-
+import android.graphics.Canvas
+import android.graphics.Paint
+import com.jeongmin.peanutview.drawing.shape.Line
 
 /**
  * Created by jay on 17. 11. 10.
  */
+class LineDrawable(paint: Paint,
+                   val line1: Line,
+                   val line2: Line? = null) : SelfDrawable() {
 
-public class LineDrawable extends SelfDrawable {
-
-    private Line line1;
-    private Line line2;
-
-    public LineDrawable(@NonNull Paint paint, Line line1, Line line2) {
-        this.line1 = line1;
-        this.line2 = line2;
-        setPaint(paint);
+    override fun drawInitialState(canvas: Canvas) {
+        canvas.drawLine(line1.x1, line1.y1, line1.x2, line1.y2, paint)
     }
 
-    @Override
-    protected void drawInitialState(Canvas canvas) {
-        canvas.drawLine(line1.getX1(), line1.getY1(), line1.getX2(), line1.getY2(), paint);
-        Log.d("jm.lee", "drawInitialState");
-    }
-
-    @Override
-    protected void drawLastState(Canvas canvas) {
+    override fun drawLastState(canvas: Canvas) {
         if (alphaAnim != null) {
-            paint.setAlpha((int)(alphaAnim.to * 255));
+            paint.alpha = (alphaAnim.to * 255).toInt()
         }
-        canvas.drawLine(line2.getX1(), line2.getY1(), line2.getX2(), line2.getY2(), paint);
-        Log.d("jm.lee", "drawLastState");
+
+        if (line2 != null) {
+            canvas.drawLine(line2.x1, line2.y1, line2.x2, line2.y2, paint)
+        } else {
+            canvas.drawLine(line1.x1, line1.y1, line1.x2, line1.y2, paint)
+        }
     }
 
-    @Override
-    protected void drawInAnimation(Canvas canvas, float interpolation) {
-        float deltaX1 = line2.getX1() - line1.getX1();
-        float deltaX2 = line2.getX2() - line1.getX2();
-        float deltaY1 = line2.getY1() - line1.getY1();
-        float deltaY2 = line2.getY2() - line1.getY2();
+    override fun drawInAnimation(canvas: Canvas, interpolation: Float) {
+        val endX1 = line2?.x1 ?: line1.x1
+        val endX2 = line2?.x2 ?: line1.x2
+        val endY1 = line2?.y1 ?: line1.y1
+        val endY2 = line2?.y2 ?: line1.y2
 
-        float toX1 = deltaX1 * interpolation + line1.getX1();
-        float toX2 = deltaX2 * interpolation + line1.getX2();
-        float toY1 = deltaY1 * interpolation + line1.getY1();
-        float toY2 = deltaY2 * interpolation + line1.getY2();
+        val deltaX1 = endX1 - line1.x1
+        val deltaX2 = endX2 - line1.x2
+        val deltaY1 = endY1 - line1.y1
+        val deltaY2 = endY2 - line1.y2
+        val toX1 = deltaX1 * interpolation + line1.x1
+        val toX2 = deltaX2 * interpolation + line1.x2
+        val toY1 = deltaY1 * interpolation + line1.y1
+        val toY2 = deltaY2 * interpolation + line1.y2
+        setAlpha(alphaAnim, paint, interpolation)
+        canvas.drawLine(toX1, toY1, toX2, toY2, paint)
+    }
 
-        setAlpha(alphaAnim, paint, interpolation);
-        canvas.drawLine(toX1, toY1, toX2, toY2, paint);
-        Log.d("jm.lee", "drawInAnimation");
+    init {
+        setPaint(paint)
     }
 }

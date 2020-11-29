@@ -21,6 +21,12 @@ public class PeanutView extends View {
     private ArrayList<SelfDrawable> drawableListToRemove;
     private ArrayList<SelfDrawable> drawableListToAdd;
 
+    public void setPeanutDrawEventListener(PeanutDrawEvent onDrawEventListener) {
+        this.onDrawEventListener = onDrawEventListener;
+    }
+
+    private PeanutDrawEvent onDrawEventListener;
+
     public PeanutView(Context context) {
         super(context);
         init();
@@ -94,6 +100,9 @@ public class PeanutView extends View {
             drawableListToAdd.clear();
         }
 
+        if (onDrawEventListener != null) {
+            onDrawEventListener.onDraw();
+        }
 
         if (needInvalidate) {
             invalidate();

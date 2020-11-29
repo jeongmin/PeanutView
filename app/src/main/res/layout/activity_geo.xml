@@ -1,81 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.somethingfun.jay.peanut.GeoActivity">
 
-        <RadioGroup
-            android:id="@+id/radiogroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:gravity="center_vertical"
-            >
+    <RadioGroup
+        android:id="@+id/radiogroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-                <RadioButton
-                    android:id="@+id/radio_rain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rain"
-                    android:checked="true"
-                    />
-
-                <RadioButton
-                    android:id="@+id/radio_line"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Line"
-                    />
-
-                <RadioButton
-                    android:id="@+id/radio_circle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Circle"
-                    />
-
-                <RadioButton
-                    android:id="@+id/radio_robbi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Robbi"
-                    />
-
-                <RadioButton
-                    android:id="@+id/radio_wav"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="WAV"
-
-                    />
-                <RadioButton
-                    android:id="@+id/radio_oval"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Oval"
-
-                    />
-
-
-
-        </RadioGroup>
-        <Button
-            android:id="@+id/clear"
+        <RadioButton
+            android:id="@+id/radio_rain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Clear"
-            />
+            android:checked="true"
+            android:text="Rain" />
+
+        <RadioButton
+            android:id="@+id/radio_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Line" />
+
+        <RadioButton
+            android:id="@+id/radio_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Circle" />
+
+        <RadioButton
+            android:id="@+id/radio_robbi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Robbi" />
+
+        <RadioButton
+            android:id="@+id/radio_wav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WAV"
+            android:visibility="gone" />
+
+        <RadioButton
+            android:id="@+id/radio_oval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oval" />
+
+        <RadioButton
+            android:id="@+id/radio_fractal_tree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fractal Tree" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear" />
 
 
-        <com.jeongmin.peanutview.view.PeanutView
-            android:id="@+id/peanutView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#8cf"
-            android:layout_below="@id/start_anim"
-            />
+    <com.jeongmin.peanutview.view.PeanutView
+        android:id="@+id/peanutView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#8cf" />
 </LinearLayout>
