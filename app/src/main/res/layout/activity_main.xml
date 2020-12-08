@@ -23,4 +23,11 @@
         android:layout_height="wrap_content"
         android:text="@string/bezier_curve"
         />
+
+    <Button
+        android:id="@+id/water_drop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/water_drop"
+        />
 </LinearLayout>

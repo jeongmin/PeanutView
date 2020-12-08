@@ -144,6 +144,10 @@ public abstract class SelfDrawable {
         this.duration = duration;
     }
 
+    public void setAnimDuration(int duration) {
+        this.duration = duration;
+    }
+
     /**
      *
      * @param input

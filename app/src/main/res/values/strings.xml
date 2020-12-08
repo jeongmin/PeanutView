@@ -3,4 +3,9 @@
     <string name="samples">Samples</string>
     <string name="bezier_curve">Bezier Curve</string>
     <string name="start">Start</string>
+    <string name="water_drop">Water drop</string>
+    <string name="guide">Guide</string>
+    <string name="quad">quad</string>
+    <string name="cubic">cubic</string>
+    <string name="show_curve">Show curve</string>
 </resources>

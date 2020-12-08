@@ -25,6 +25,9 @@
 
         <activity android:name=".BezierActivity">
         </activity>
+
+        <activity android:name=".WaterdropActivity">
+        </activity>
     </application>
 
 </manifest>

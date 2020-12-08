@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/canvas"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.somethingfun.jay.peanut.WaterdropActivity">
+
+    <com.jeongmin.peanutview.view.WaterDropView
+        android:id="@+id/water_drop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:visibility="gone"
+        />
+
+    <com.jeongmin.peanutview.view.PeanutView
+        android:id="@+id/peanut_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000" />
+</FrameLayout>

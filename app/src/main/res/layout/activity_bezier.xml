@@ -11,29 +11,61 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:background="#000000"
+        >
 
         <com.jeongmin.peanutview.view.PeanutView
             android:id="@+id/peanutView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#000000" />
+            />
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="8dp">
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchGuide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Guide"
+            android:text="@string/guide"
             android:checked="true"
-            >
-        </Switch>
+            />
 
+        <RadioGroup
+            android:id="@+id/groupBezier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp">
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/bezierQuad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quad"
+                android:checked="true"
+                />
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/bezierCubic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cubic"
+                />
+        </RadioGroup>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/showCurve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_curve"/>
     </LinearLayout>
 
     <Button

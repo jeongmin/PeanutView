@@ -27,5 +27,9 @@ class MainActivity: AppCompatActivity() {
         binding.bezier.setOnClickListener {
             startActivity(Intent(this, BezierActivity::class.java))
         }
+
+        binding.waterDrop.setOnClickListener {
+            startActivity(Intent(this, WaterdropActivity::class.java))
+        }
     }
 }

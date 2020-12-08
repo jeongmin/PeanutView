@@ -22,4 +22,6 @@ class Circle{
         this.cy = point.y
         this.radius = radius
     }
+
+    fun getPoint() = PointF(cx, cy)
 }
