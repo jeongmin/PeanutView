@@ -28,8 +28,8 @@ class MainActivity: AppCompatActivity() {
             startActivity(Intent(this, BezierActivity::class.java))
         }
 
-        binding.waterDrop.setOnClickListener {
-            startActivity(Intent(this, WaterdropActivity::class.java))
+        binding.taegeukgi.setOnClickListener {
+            startActivity(Intent(this, TaegeukgiActivity::class.java))
         }
     }
 }
