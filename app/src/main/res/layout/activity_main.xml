@@ -25,9 +25,9 @@
         />
 
     <Button
-        android:id="@+id/water_drop"
+        android:id="@+id/taegeukgi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/water_drop"
+        android:text="@string/taegeukgi"
         />
 </LinearLayout>

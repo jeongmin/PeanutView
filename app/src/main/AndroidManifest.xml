@@ -28,6 +28,9 @@
 
         <activity android:name=".WaterdropActivity">
         </activity>
+
+        <activity android:name=".TaegeukgiActivity">
+        </activity>
     </application>
 
 </manifest>
