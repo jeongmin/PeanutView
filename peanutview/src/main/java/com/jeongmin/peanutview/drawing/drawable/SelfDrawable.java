@@ -2,10 +2,10 @@ package com.jeongmin.peanutview.drawing.drawable;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.view.animation.Interpolator;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import android.util.Log;
-import android.view.animation.Interpolator;
 
 import com.jeongmin.peanutview.drawing.event.OnAnimationEnd;
 import com.jeongmin.peanutview.transition.AlphaTransition;
@@ -14,20 +14,20 @@ import com.jeongmin.peanutview.transition.AlphaTransition;
 /**
  * Created by jay on 17. 11. 10.
  */
-
 public abstract class SelfDrawable {
 
-    protected Paint paint;                  // paint for drawing
-    protected Interpolator interpolator;    // interpolator
-    protected AlphaTransition alphaAnim;    // represent for alpha anim
-    protected long duration;                // duration of animation
-    protected long startTime;               // animation starting time
-    protected long delay;                   // delay before starting
-    protected boolean repeatAnim;           // repeat animation or not
-    protected boolean onAnimating;
-    protected boolean isTheLastAnimationFrame; // We need to show the last frame
+    protected Paint paint;                          // paint for drawing
+    protected Interpolator interpolator;            // interpolator
+    protected AlphaTransition alphaAnim;            // represent for alpha anim
+    protected long duration;                        // duration of animation
+    protected long startTime;                       // animation starting time
+    protected long delay;                           // delay before starting
+    protected boolean repeatAnim;                   // repeat animation or not
+    protected boolean isTheLastAnimationFrame;      // We need to show the last frame
     protected boolean retainAfterAnimation = true;
     protected float interpolation = 0F;
+
+    private boolean onAnimating;
 
     protected OnAnimationEnd onAnimationEndEvent;
 
@@ -67,6 +67,10 @@ public abstract class SelfDrawable {
 
     public long getDelay() {
         return delay;
+    }
+
+    public long getTotalAnimationDuration() {
+        return duration + delay;
     }
 
     protected boolean shouldInvalidate() {
