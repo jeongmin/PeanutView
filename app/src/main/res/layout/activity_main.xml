@@ -30,4 +30,11 @@
         android:layout_height="wrap_content"
         android:text="@string/taegeukgi"
         />
+
+    <Button
+        android:id="@+id/touchEffect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/touch_effect"
+        />
 </LinearLayout>

@@ -31,5 +31,9 @@ class MainActivity: AppCompatActivity() {
         binding.taegeukgi.setOnClickListener {
             startActivity(Intent(this, TaegeukgiActivity::class.java))
         }
+
+        binding.touchEffect.setOnClickListener {
+            startActivity(Intent(this, TouchEffectActivity::class.java))
+        }
     }
 }
