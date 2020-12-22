@@ -31,6 +31,9 @@
 
         <activity android:name=".TaegeukgiActivity">
         </activity>
+
+        <activity android:name=".TouchEffectActivity">
+        </activity>
     </application>
 
 </manifest>

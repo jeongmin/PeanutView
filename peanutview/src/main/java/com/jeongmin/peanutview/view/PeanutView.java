@@ -2,10 +2,10 @@ package com.jeongmin.peanutview.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.jeongmin.peanutview.drawing.drawable.SelfDrawable;
 
@@ -108,8 +108,6 @@ public class PeanutView extends View {
         if (needInvalidate) {
             invalidate();
         }
-
-        Log.d("jm.lee", "selfDrawableList.size: " + selfDrawableList.size());
     }
 
     /**
